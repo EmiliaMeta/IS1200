@@ -97,7 +97,7 @@ jtagconfig
   LEDs                Indicate current room
   7‑Segment Display   Shows player and enemy HP
 
-⚠️ **Important:** Switch 0 is not initialized.
+**Important:** Switch 0 is not initialized.
 
 ------------------------------------------------------------------------
 
