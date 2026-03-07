@@ -1,0 +1,6 @@
+{
+    "files.associations": {
+        "*.md": "markdown",
+        "textstring.h": "c"
+    }
+}

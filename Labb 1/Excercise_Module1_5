@@ -1,0 +1,49 @@
+# Excercise for module 1 assignment 5. Instructions:
+
+# Construct a RISC-V assembly function that copies data between two memory addresses.
+# The first function parameter is the source address.
+# The second parameter the destination address.
+# The third parameter the size of the data that should be copied (in bytes).
+# The function must copy one byte each time, meaning; use the load byte and the store byte instructions.
+# The function must also follow RISCV register calling conventions.
+
+# a0 = source pointer
+# a1 = destination pointer
+# a2 = size in bytes
+# t0 = temporary switch
+
+
+.data
+src:    .byte 1,2,3,4,5      	# sample data
+dst:    .space 5             	# destination buffer (5 bytes)
+
+    	.text
+    	.globl start
+
+start:
+    	la   a0, src           # a0 = &src[0]
+    	la   a1, dst           # a1 = &dst[0]
+    	li   a2, 5   		# a2 = length = 5
+   	jal  ra, copy 		# call function
+	
+	li   a7, 10           # RARS/Venus: ecall 10 = exit
+    	ecall
+copy:
+	addi t1, zero, 0 	# t1 = i. i = 0
+	beq a2, zero, done 	# n = a2. if n == 0, return
+	
+loop:
+	add t2, a0, t1		# t2 = source + i
+	lbu t0, 0(t2)		# t0 = *(source + i)
+	
+	add t3, a1, t1		# t3 = destination + i
+	sb t0, 0(t3)		# t0 = *(destination + i)
+	
+	addi t1, t1, 1		# increment i, i++
+	blt t1, a2, loop	# if (t1 < a2), return. if (n < size in bytes), return
+	
+done:
+	jalr zero, 0(ra)	#return
+	
+	
+	
