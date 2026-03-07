@@ -1,6 +1,6 @@
 # Project Overview
 Includes all labs from course IS1200 as well as:
-**Pocketcreature** is an interactive fiction and battle game.\
+**Pocketcreature**, an interactive fiction and battle game.\
 The game is developed for the **DTEK-V board** as part of the **KTH
 course IS1200 Computer Hardware Engineering (Spring 2025)**.
 
