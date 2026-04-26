@@ -1,113 +1,111 @@
-# Project Overview
-Includes all labs from course IS1200 as well as:
-**Pocketcreature**, an interactive fiction and battle game.\
-The game is developed for the **DTEK-V board** as part of the **KTH
-course IS1200 Computer Hardware Engineering (Spring 2025)**.
+# IS1200: Computer Hardware Engineering (C & RISC-V Assembly)
 
-The player explores nine unique rooms, collects items, catches
-creatures, and battles gym leaders to ultimately defeat the final boss.
+Course work from **IS1200 Computer Hardware Engineering** at KTH Royal Institute of Technology.
 
-Gameplay logic, story, and hardware I/O are implemented entirely in
-**C** and run directly on the **DTEK-V board with the I/O shield
-attached**.
+The course covers low-level programming in C and RISC-V assembly, embedded I/O, interrupt handling, processor design in Logisim, and hardware-software integration on the DTEK-V board.
 
-------------------------------------------------------------------------
+> All labs and the project were done in collaboration with Alena Arsalan Amir.  
+> **My contributions:** Full involvement across all parts; coding, hardware integration, I/O configuration, testing, and report writing.
 
-# Running the Game on the DTEK-V Board
+---
 
-## 1. Connect the Board
+## Featured Project: Pocketcreature
 
-Connect the **DTEK-V board** to your computer and download the project
-folder.
+An interactive fiction and battle game running directly on the **DTEK-V board with I/O shield**, implemented entirely in C.
 
-## 2. Open Terminal
+The player explores nine unique rooms, collects items, catches creatures, and battles gym leaders to ultimately defeat a final boss — with all game logic, story, and hardware I/O written from scratch.
 
-Open the terminal in your **DTEK-V development environment**.
+### Running the Game
 
-## 3. Navigate to the Project Folder
-
-``` bash
+```bash
+# Navigate to project folder
 cd [path to folder]
-```
 
-## 4. Compile the Program
-
-``` bash
+# Compile
 make
-```
 
-This compiles all `.c` and `.S` files and links them into the executable
-binary for the DTEK-V board.
-
-If compilation succeeds, a new file will appear:
-
-    main.bin
-
-## 5. Prepare the Board
-
-Make sure the **DTEK-V board** is connected via USB.
-
-Press **BTN0** on the board to reset before loading a new program.
-
-## 6. Run the Game
-
-``` bash
+# Upload and run on DTEK-V board
 dtekv-run main.bin
 ```
 
-------------------------------------------------------------------------
+Press **BTN0** to reset the board before loading a new program. Game text (story, menus, dialogue) is displayed in the **JTAG UART Terminal**.
 
-# Optional Commands
+### Controls
 
-## Clean Build Files
-
-Remove object and temporary files from the folder:
-
-``` bash
-make clean
-```
-
-## JTAG UART Terminal
-
-Find and run the **JTAG UART Terminal**.
-
-The terminal displays all game text such as:
-
--   Story
--   Menus
--   Dialogue
-
-It usually opens automatically, but if it does not you can start it
-manually.
-
-If the terminal freezes or fails to connect, run:
-
-``` bash
-pkill jtag
-jtagconfig
-```
-
-------------------------------------------------------------------------
-
-# Controls
-
-  Control             Function
-  ------------------- ------------------------------------------------------
-  SW1--SW4            Navigate menus and rooms. Toggle up and down to use.
-  LEDs                Indicate current room
-  7‑Segment Display   Shows player and enemy HP
-
-**Important:** Switch 0 is not initialized.
-
-------------------------------------------------------------------------
-
-# Gameplay
-
-Follow the tutorial at game start (**Professor Maple**) to learn how to:
-
--   Catch creatures
--   Battle enemies
+| Control | Function |
+|---------|---------|
+| SW1–SW4 | Navigate menus and rooms |
+| LEDs | Indicate current room |
+| 7-segment display | Shows player and enemy HP |
 
 ### Goal
 
-Defeat all **gym leaders** and the **final boss in room 9**.
+Follow **Professor Maple's** tutorial, catch creatures, defeat all gym leaders, and beat the **final boss in room 9**.
+
+---
+
+## Labs
+
+### Lab 1 — Assembly Programming (RISC-V)
+**Concepts:** RISC-V assembly, subroutines, register conventions, bit manipulation, hardware timing, DTEK-V board
+ 
+Six assignments building up a complete clock program from scratch in RISC-V assembly:
+- **Analyzing assembly** — single-stepped through existing code in RARS simulator, modified it to print every third ASCII character
+- **hexasc** — wrote a subroutine converting numbers 0–15 to ASCII hex characters (`'0'`–`'9'`, `'A'`–`'F'`) using only the 4 least significant bits of the input, ignoring all others
+- **time2string** — wrote a subroutine converting NBCD-encoded time data into a printable `MM:SS\0` string, calling `hexasc` for each digit while correctly saving and restoring all callee-saved registers
+- **delay** — translated a nested C loop into assembly, calibrated the loop constant for accurate millisecond timing on the DTEK-V board (30 MHz clock)
+- **DTEK-V deployment** — ported all code from RARS simulator to real hardware, handled differences in assembler directives (`.global`, macro syntax) between RARS and GCC, verified timing accuracy within ±10%
+
+---
+
+### Lab 2: C Programming
+**Concepts:** Control flow, functions, arrays, pointers, memory layout, stack vs. heap
+
+Five assignments covering C fundamentals:
+- **is_prime()** — primality check using loops and conditionals
+- **print_primes()** — printing primes in columns using functions and side effects
+- **Sieve of Eratosthenes** — implemented with both stack and heap allocation
+- **Pointer arithmetic** — translating RISC-V assembly functions (`work`, `copycodes`) into equivalent C using raw pointer operations, no array indexing
+- **Memory layout** — inspecting and explaining where global variables, local variables, pointers, and functions are placed in memory on the DTEK-V board
+
+---
+
+### Lab 3 — I/O Programming
+**Concepts:** Memory-mapped I/O, polling, hardware timers, interrupt handling, RISC-V calling conventions
+
+Three progressively more advanced assignments on the DTEK-V board:
+- **Polling** — reading toggle switches and push-buttons, driving LEDs and 7-segment displays; implemented a real-time clock (HH:MM:SS) with switch-based time adjustment
+- **Timer** — replaced busy-wait delays with a hardware timer (30 MHz crystal, 100 ms timeouts) for precise second-accurate display updates
+- **Interrupts** — moved time display updates into an interrupt service routine (ISR), freeing the main loop to run a prime number computation concurrently; enabled timer interrupts in RISC-V `mstatus`/`mie` registers via assembly
+
+---
+
+### Lab 4: Processor Design
+**Concepts:** Digital logic, ALU design, register files, control units, data paths, RISC-V instruction encoding
+
+Built a functional single-cycle RISC-V processor in **Logisim**, step by step:
+- **ALU** — implemented add, subtract (two's complement), AND, OR, and SLT with a Zero output flag
+- **Register file** — 8×32-bit registers with 2 read ports and 1 write port; hardwired register `x0` to always read zero
+- **Control unit** — decode logic for `addi`, `add`, and `beq` instructions including branch condition evaluation
+- **Data path** — full single-cycle pipeline: PC increment, ROM instruction fetch, register read/write, ALU computation, and conditional branching
+- **Factorial in assembly** — wrote a RISC-V program computing n! using only `add`, `addi`, and `beq`, loaded it into the processor's ROM, and verified results for 0!, 3!, and 8!
+
+---
+
+##: Tech Stack
+
+| Tool | Purpose |
+|------|---------|
+| C | Lab 2, Lab 3, Pocketcreature game logic |
+| RISC-V Assembly | Lab 1, Lab 4 factorial, boot code |
+| Logisim Evolution | Lab 4 processor design |
+| DTEK-V board | Hardware target for Labs 3, 4 and Pocketcreature |
+| RARS simulator | RISC-V assembly simulation and testing |
+| gcc / make | Compilation toolchain |
+
+---
+
+## Authors
+
+**Emilia Lindqvist** — KTH Information Technology  
+[GitHub Profile](https://github.com/EmiliaMeta)
