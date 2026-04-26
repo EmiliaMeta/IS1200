@@ -92,7 +92,7 @@ Built a functional single-cycle RISC-V processor in **Logisim**, step by step:
 
 ---
 
-##: Tech Stack
+## Tech Stack
 
 | Tool | Purpose |
 |------|---------|
