@@ -46,7 +46,7 @@ Follow **Professor Maple's** tutorial, catch creatures, defeat all gym leaders, 
 
 ## Labs
 
-### Lab 1 — Assembly Programming (RISC-V)
+### Lab 1: Assembly Programming (RISC-V)
 **Concepts:** RISC-V assembly, subroutines, register conventions, bit manipulation, hardware timing, DTEK-V board
  
 Six assignments building up a complete clock program from scratch in RISC-V assembly:
